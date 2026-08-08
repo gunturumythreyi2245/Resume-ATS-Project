@@ -18,6 +18,7 @@ import sqlite3
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import session, redirect, url_for, flash
+from utils import database
 app = Flask(__name__)
 app.secret_key = os.environ.get(
     "SECRET_KEY",
