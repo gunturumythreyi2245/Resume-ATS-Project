@@ -1,158 +1,91 @@
-# 🤖 Resume ATS Analyzer
+# Resume ATS Analyzer
 
-An AI-powered Resume Applicant Tracking System (ATS) Analyzer that evaluates resumes, compares them with job descriptions, identifies relevant and missing skills, checks important resume sections, calculates ATS scores, and generates downloadable ATS reports.
+An AI-powered Resume Applicant Tracking System (ATS) Analyzer built with Python and Flask. The application analyzes resumes against job descriptions, calculates an ATS compatibility score, identifies matched and missing skills, evaluates resume sections, and provides personalized improvement suggestions.
 
-## 🚀 Overview
+## 🚀 Features
 
-Many companies use Applicant Tracking Systems (ATS) to filter resumes before they reach recruiters. A resume can be technically strong but still perform poorly if it lacks relevant keywords, skills, or important sections.
-
-This project provides a web-based platform that helps job seekers understand how well their resume matches a target job and what they can improve.
-
-The application allows users to:
-
-- Upload their resume
-- Extract and analyze resume content
-- Calculate an ATS score
-- Detect important resume sections
-- Identify skills present in the resume
-- Compare resume skills with a Job Description
-- Identify matched and missing skills
-- Generate personalized suggestions
-- Download an ATS analysis report
-- View previous resume analysis results
-
----
-
-## ✨ Features
-
-### 📄 Resume Analysis
-
-- Upload resumes for automated analysis
-- Extract text from resume documents
-- Detect important resume sections
-- Extract email and phone number
-- Identify technical and professional skills
-
-### 📊 ATS Score
-
-The system generates an ATS compatibility score based on factors such as:
-
-- Resume sections
-- Skills detected
-- Resume completeness
-- Relevant keywords
-
-### 💼 Job Description Matching
-
-Users can provide a Job Description to compare it with their resume.
-
-The system identifies:
-
-- ✅ Matched skills
-- ❌ Missing skills
-- 📊 Job Match Score
-
-This helps users understand how closely their resume aligns with a specific job opportunity.
-
-### 💡 Resume Improvement Suggestions
-
-The application provides suggestions based on detected weaknesses in the resume, helping users improve its ATS compatibility and completeness.
-
-### 📑 ATS Report Generation
-
-Users can generate and download a structured PDF report containing:
-
-- ATS Score
-- Contact information
-- Skills found
-- Matched skills
-- Missing skills
-- Resume section analysis
-- Improvement suggestions
-
-### 🔐 User Authentication
-
-The application includes:
-
-- User registration
-- Login
-- Logout
-- Session management
-- User-specific analysis history
-
-### 📚 Analysis History
-
-Previously analyzed resumes can be stored and accessed through the user's history.
-
----
+- 📄 Resume PDF upload and parsing
+- 🤖 ATS-based resume analysis
+- 📊 ATS compatibility score
+- 🎯 Job description and resume matching
+- ✅ Matched skills identification
+- ❌ Missing skills identification
+- 📝 Resume section analysis
+- 💡 Personalized resume improvement suggestions
+- 📑 Downloadable ATS analysis reports
+- 👤 User signup and login
+- 🔐 Password-protected user accounts
+- 🗃️ SQLite database for user and analysis data
+- 📚 Analysis history
+- 🌐 Flask-based web interface
+- 📱 Responsive HTML/CSS interface
 
 ## 🛠️ Tech Stack
 
-### Frontend
-
-- HTML5
-- CSS3
-- Bootstrap 5
-
 ### Backend
-
 - Python
 - Flask
-
-### Resume Processing
-
-- PyPDF2
-- python-docx
-
-### Data & Storage
-
 - SQLite
-- Python
 
-### Report Generation
+### Resume Processing & NLP
+- PyPDF2
+- pdfplumber
+- spaCy
+- NLTK
 
+### Frontend
+- HTML5
+- CSS3
+- JavaScript
+
+### Other Tools
 - ReportLab
-
-### Deployment
-
+- python-docx
 - Gunicorn
+- Git & GitHub
 
-### Version Control
+## ⚙️ How It Works
 
-- Git
-- GitHub
+1. User creates an account or logs in.
+2. User uploads their resume in PDF format.
+3. User provides a target job description.
+4. The system extracts text from the resume.
+5. Resume sections and skills are identified.
+6. Resume content is compared with the job description.
+7. The system calculates an ATS compatibility score.
+8. Matched and missing skills are displayed.
+9. Personalized improvement suggestions are generated.
+10. The analysis can be saved to history and downloaded as a report.
 
----
-
-## 🏗️ Project Structure
+## 📂 Project Structure
 
 ```text
 Resume-ATS-Project/
+│
+├── app.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+│
+├── templates/
+│   ├── index.html
+│   ├── login.html
+│   ├── signup.html
+│   ├── dashboard.html
+│   ├── result.html
+│   └── history.html
 │
 ├── static/
 │   ├── css/
 │   └── uploads/
 │
-├── templates/
-│   ├── dashboard.html
-│   ├── history.html
-│   ├── index.html
-│   ├── login.html
-│   ├── result.html
-│   └── signup.html
-│
-├── utils/
-│   ├── ats_score.py
-│   ├── database.py
-│   ├── job_match.py
-│   ├── matcher.py
-│   ├── parser.py
-│   ├── reports.py
-│   ├── sections.py
-│   ├── skills.py
-│   └── suggestions.py
-│
-├── app.py
-├── requirements.txt
-├── .gitignore
-└── README.md
+└── utils/
+    ├── ats_score.py
+    ├── database.py
+    ├── job_match.py
+    ├── matcher.py
+    ├── parser.py
+    ├── reports.py
+    ├── sections.py
+    ├── skills.py
+    └── suggestions.py
