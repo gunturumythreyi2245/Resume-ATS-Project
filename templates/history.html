@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Previous Analyses</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body style="background:#eef3f8;">
+
+<div class="container mt-5">
+
+    <div class="card shadow p-4">
+
+        <h2 class="mb-4">
+            📚 Previous Resume Analyses
+        </h2>
+
+        {% if history %}
+
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-dark">
+
+                <tr>
+                    <th>ID</th>
+                    <th>Resume</th>
+                    <th>ATS Score</th>
+                    <th>Matched</th>
+                    <th>Missing</th>
+                    <th>Date</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for row in history %}
+
+                <tr>
+
+                    <td>{{ row["id"] }}</td>
+
+                    <td>{{ row["resume_name"] }}</td>
+
+                    <td>
+
+                        {% if row["ats_score"] >= 80 %}
+                            <span class="badge bg-success">
+                                {{ row["ats_score"] }}%
+                            </span>
+
+                        {% elif row["ats_score"] >= 60 %}
+                            <span class="badge bg-warning text-dark">
+                                {{ row["ats_score"] }}%
+                            </span>
+
+                        {% else %}
+                            <span class="badge bg-danger">
+                                {{ row["ats_score"] }}%
+                            </span>
+                        {% endif %}
+
+                    </td>
+
+                    <td>{{ row["matched"] }}</td>
+
+                    <td>{{ row["missing"] }}</td>
+
+                    <td>{{ row["analysis_date"] }}</td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="alert alert-info">
+            No previous analyses found.
+        </div>
+
+        {% endif %}
+
+        <div class="mt-4">
+
+            <a href="/dashboard" class="btn btn-primary">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

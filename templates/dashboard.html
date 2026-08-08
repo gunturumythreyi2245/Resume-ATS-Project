@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body style="background:#eef3f8;">
+
+<div class="container mt-5 mb-5">
+
+    <div class="card shadow p-5">
+
+        <!-- WELCOME -->
+
+        <h1 class="text-center mb-4">
+            👋 Welcome, {{ username }}
+        </h1>
+
+        <hr>
+
+
+        <!-- STATISTICS -->
+
+        <div class="row mt-4">
+
+            <!-- TOTAL -->
+
+            <div class="col-md-4 mb-3">
+
+                <div class="card border-primary shadow-sm h-100">
+
+                    <div class="card-body text-center">
+
+                        <h5>📊 Total Analyses</h5>
+
+                        <h2>
+                            {{ stats["total"] }}
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Resumes analyzed
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- HIGHEST -->
+
+            <div class="col-md-4 mb-3">
+
+                <div class="card border-success shadow-sm h-100">
+
+                    <div class="card-body text-center">
+
+                        <h5>🏆 Highest ATS</h5>
+
+                        <h2>
+                            {{ stats["highest"] or 0 }}%
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Best score achieved
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- AVERAGE -->
+
+            <div class="col-md-4 mb-3">
+
+                <div class="card border-warning shadow-sm h-100">
+
+                    <div class="card-body text-center">
+
+                        <h5>📈 Average ATS</h5>
+
+                        <h2>
+                            {{ "%.1f"|format(stats["average"] or 0) }}%
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Average resume score
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr class="my-4">
+
+
+        <!-- ATS SCORE HISTORY -->
+
+        <div class="card shadow-sm p-4 mb-4">
+
+            <h4 class="mb-4">
+                📈 ATS Score History
+            </h4>
+
+
+            {% if analyses %}
+
+            <div style="height:350px;">
+                <canvas id="atsChart"></canvas>
+            </div>
+
+            {% else %}
+
+            <div class="alert alert-info">
+                Analyze a resume to see your ATS score history.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- MATCHED VS MISSING -->
+
+        <div class="card shadow-sm p-4 mb-4">
+
+            <h4 class="mb-4">
+                🎯 Matched vs Missing Skills
+            </h4>
+
+
+            {% if analyses %}
+
+            <div style="height:350px;">
+                <canvas id="skillsChart"></canvas>
+            </div>
+
+            {% else %}
+
+            <div class="alert alert-info">
+                Analyze a resume to see your skill matching statistics.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="row mt-3">
+
+            <!-- ANALYZE -->
+
+            <div class="col-md-4 mb-2">
+
+                <a
+                    href="{{ url_for('home') }}"
+                    class="btn btn-primary btn-lg w-100"
+                >
+                    📄 Analyze Resume
+                </a>
+
+            </div>
+
+
+            <!-- HISTORY -->
+
+            <div class="col-md-4 mb-2">
+
+                <a
+                    href="{{ url_for('history') }}"
+                    class="btn btn-success btn-lg w-100"
+                >
+                    📊 Previous Analyses
+                </a>
+
+            </div>
+
+
+            <!-- LOGOUT -->
+
+            <div class="col-md-4 mb-2">
+
+                <a
+                    href="{{ url_for('logout') }}"
+                    class="btn btn-danger btn-lg w-100"
+                >
+                    🚪 Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- CHART.JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+{% if analyses %}
+
+<script>
+
+    /* ==========================================
+       ATS SCORE HISTORY
+       ========================================== */
+
+    const resumeLabels = [
+        {% for analysis in analyses %}
+            "{{ analysis['resume_name'] }}",
+        {% endfor %}
+    ];
+
+
+    const atsScores = [
+        {% for analysis in analyses %}
+            {{ analysis['ats_score'] | int }},
+        {% endfor %}
+    ];
+
+
+    const atsCanvas = document.getElementById("atsChart");
+
+
+    new Chart(atsCanvas, {
+
+        type: "line",
+
+        data: {
+
+            labels: resumeLabels,
+
+            datasets: [
+
+                {
+                    label: "ATS Score (%)",
+
+                    data: atsScores,
+
+                    tension: 0.3,
+
+                    fill: false,
+
+                    borderWidth: 3,
+
+                    pointRadius: 5
+                }
+
+            ]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true,
+
+                    max: 100,
+
+                    title: {
+
+                        display: true,
+
+                        text: "ATS Score (%)"
+
+                    }
+
+                },
+
+                x: {
+
+                    title: {
+
+                        display: true,
+
+                        text: "Resume"
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+
+
+    /* ==========================================
+       MATCHED VS MISSING SKILLS
+       ========================================== */
+
+
+    const matchedData = [
+
+        {% for analysis in analyses %}
+            {{ analysis['matched'] | int }},
+        {% endfor %}
+
+    ];
+
+
+    const missingData = [
+
+        {% for analysis in analyses %}
+            {{ analysis['missing'] | int }},
+        {% endfor %}
+
+    ];
+
+
+    const skillsCanvas = document.getElementById("skillsChart");
+
+
+    new Chart(skillsCanvas, {
+
+        type: "bar",
+
+        data: {
+
+            labels: resumeLabels,
+
+            datasets: [
+
+                {
+
+                    label: "Matched Skills",
+
+                    data: matchedData,
+
+                    borderWidth: 1
+
+                },
+
+                {
+
+                    label: "Missing Skills",
+
+                    data: missingData,
+
+                    borderWidth: 1
+
+                }
+
+            ]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true,
+
+                    ticks: {
+
+                        stepSize: 1
+
+                    },
+
+                    title: {
+
+                        display: true,
+
+                        text: "Number of Skills"
+
+                    }
+
+                },
+
+                x: {
+
+                    title: {
+
+                        display: true,
+
+                        text: "Resume"
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+</script>
+
+{% endif %}
+
+
+</body>
+
+</html>
